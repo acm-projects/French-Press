@@ -20,8 +20,6 @@ Mobile app that opens new avenues to coffee through a focus on local vendors and
 - Navigation ability
 - brewing calculator
 
-Markdown is a lightweight markup language based on the formatting conventions that people naturally use in email.  As [John Gruber] writes on the [Markdown site][df1]
-
 ## Tech Stack
 > the Tech Stack isn't concrete; feel free to do your own research and decide what technologies would be best suited for the app!
 >
@@ -30,7 +28,7 @@ Markdown is a lightweight markup language based on the formatting conventions th
 * [Flutter] - Flutter is Google’s UI toolkit for building beautiful, natively compiled applications for mobile, web, and desktop from a single codebase.
 * [Firebase] - Integrates easily with both Flutter and React.
 * [Android Studio] - You should know why.
-* [git] - Pretty terminal. Download git BASH.
+* [git] - Pretty terminal.
 
 ### Installation
 
