@@ -30,15 +30,17 @@ Markdown is a lightweight markup language based on the formatting conventions th
 * [Flutter] - Flutter is Google’s UI toolkit for building beautiful, natively compiled applications for mobile, web, and desktop from a single codebase.
 * [Firebase] - Integrates easily with both Flutter and React.
 * [Android Studio] - You should know why.
+* [git] - Pretty terminal. Download git BASH.
 
 ### Installation
 
 ##### Getting started with React Native:
 React Native's documentation describes how to install it perfectly.
+Open git or Terminal and run this command:
 ```sh
 > npx react-native init MyTestApp
 ```
-after running that command follow the rest of the article to quickly create a mock app: [React Native Installation]
+after running, follow the rest of the article to quickly create a mock app: [React Native Installation]
 
 ##### Getting started with Flutter:
 Follow Flutter's installation docs: [Flutter Installation]
@@ -58,4 +60,5 @@ Follow Android Studio's installation docs: [Android Studio]
    [Flutter Installation]: <https://flutter.dev/docs/get-started/install>
    [Getting started with Firebase]: <https://firebase.google.com/docs/android/setup?authuser=0>
    [The Gist]: <https://dart.dev/guides/language/language-tour>
+   [git]: <https://gitforwindows.org/>
 
