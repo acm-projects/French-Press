@@ -30,6 +30,19 @@ Mobile app that opens new avenues to coffee through a focus on local vendors and
 * [Android Studio] - You should know why.
 * [git] - Pretty terminal.
 
+### Building an API
+> The trouble with creating an app with local coffee shop data, is that there is no pre-existing API that has all that information for you. For French Press, the team will have to gather data on foot inputing the data into their own API! Which means lots of coffee drinking and coffee shop visiting.
+
+##### Here's a few "local" coffee shops to start at 
+- I Love U A-Latte - 581 W Campbell Rd #125, Richardson, TX 75080
+- 1418 Coffee House - 1418 K Ave, Plano, TX 75074
+- Pearl Cup Coffee - 2701 Custer Pkwy #917, Richardson, TX 75080
+- Cafe Brazil - 2071 N Central Expy, Richardson, TX 75080
+- White Rock Castle - 10105 E NW Hwy, Dallas, TX 75238
+- Houndstooth - 1900 N Henderson Ave, Dallas, TX 75206
+- Merit Coffee Co. - 2639 Main St, Dallas, TX 75226
+- Black Forest Coffee - 5801 Northwest Hwy, Dallas, TX 75231
+
 ### Installation
 
 ##### Getting started with React Native:
@@ -50,6 +63,10 @@ Follow Firebase's installation docs: [Getting started with Firebase]
 ##### Getting started with Android Studio:
 Follow Android Studio's installation docs: [Android Studio]
 
+#### Creating an API
+Follow this guide: [API]
+
+   [API]: <https://dev.to/steelwolf180/building-restful-api-with-flask-postman--pytest---part-2-read-time-10-mins-1d6d>
    [Firebase]: <https://firebase.google.com/>
    [Flutter]: <https://flutter.dev/>
    [React Native]: <https://facebook.github.io/react-native/>
