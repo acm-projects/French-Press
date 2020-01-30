@@ -28,7 +28,7 @@ Mobile app that opens new avenues to coffee through a focus on local vendors and
 * [Flutter] - Flutter is Google’s UI toolkit for building beautiful, natively compiled applications for mobile, web, and desktop from a single codebase.
 * [Firebase] - Integrates easily with both Flutter and React.
 * [Android Studio] - You should know why.
-* [git] - Pretty terminal.
+* [git] - Pretty terminal. (Here is a [cheat sheet])
 
 ### Building an API
 > The trouble with creating an app with local coffee shop data, is that there is no pre-existing API that has all that information for you. For French Press, the team will have to gather data on foot inputing the data into their own API! Which means lots of coffee drinking and coffee shop visiting.
@@ -76,4 +76,5 @@ Follow this guide: [API]
    [Getting started with Firebase]: <https://firebase.google.com/docs/android/setup?authuser=0>
    [The Gist]: <https://dart.dev/guides/language/language-tour>
    [git]: <https://gitforwindows.org/>
+   [cheat sheet]: <https://education.github.com/git-cheat-sheet-education.pdf>
 
