@@ -19,6 +19,7 @@ Mobile app that opens new avenues to coffee through a focus on local vendors and
 - Partnering with local coffee shops
 - Navigation ability
 - brewing calculator
+- Create animations to teach brewing techniques
 
 ## Tech Stack
 > the Tech Stack isn't concrete; feel free to do your own research and decide what technologies would be best suited for the app!
