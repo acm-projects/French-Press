@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'home.dart';
+import 'sign_in.dart';
 
 
 
@@ -31,23 +32,17 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController pwdInputController;
 
 
-
   @override
-
   initState() {
-
     emailInputController = new TextEditingController();
 
     pwdInputController = new TextEditingController();
 
     super.initState();
-
   }
 
 
-
   String emailValidator(String value) {
-
     Pattern pattern =
 
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -55,39 +50,24 @@ class _LoginPageState extends State<LoginPage> {
     RegExp regex = new RegExp(pattern);
 
     if (!regex.hasMatch(value)) {
-
       return 'Email format is invalid';
-
     } else {
-
       return null;
-
     }
-
   }
-
 
 
   String pwdValidator(String value) {
-
     if (value.length < 8) {
-
       return 'Password must be longer than 8 characters';
-
     } else {
-
       return null;
-
     }
-
   }
 
 
-
   @override
-
   Widget build(BuildContext context) {
-
     return Scaffold(
 
         appBar: AppBar(
@@ -114,7 +94,8 @@ class _LoginPageState extends State<LoginPage> {
 
                         decoration: InputDecoration(
 
-                            labelText: 'Email*', hintText: "john.doe@gmail.com"),
+                            labelText: 'Email*',
+                            hintText: "john.doe@gmail.com"),
 
                         controller: emailInputController,
 
@@ -142,14 +123,14 @@ class _LoginPageState extends State<LoginPage> {
 
                         child: Text("Login"),
 
-                        color: Theme.of(context).primaryColor,
+                        color: Theme
+                            .of(context)
+                            .primaryColor,
 
                         textColor: Colors.white,
 
                         onPressed: () {
-
                           if (_loginFormKey.currentState.validate()) {
-
                             FirebaseAuth.instance
 
                                 .signInWithEmailAndPassword(
@@ -158,36 +139,35 @@ class _LoginPageState extends State<LoginPage> {
 
                                 password: pwdInputController.text)
 
-                                .then((currentUser) => Firestore.instance
+                                .then((currentUser) =>
+                                Firestore.instance
 
-                                .collection("users")
+                                    .collection("users")
 
-                                .document(currentUser.uid)
+                                    .document(currentUser.uid)
 
-                                .get()
+                                    .get()
 
-                                .then((DocumentSnapshot result) =>
+                                    .then((DocumentSnapshot result) =>
 
-                                Navigator.pushReplacement(
+                                    Navigator.pushReplacement(
 
-                                    context,
+                                        context,
 
-                                    MaterialPageRoute(
+                                        MaterialPageRoute(
 
-                                        builder: (context) => MapPage(
+                                            builder: (context) =>
+                                                MapPage(
 
-                                          title: currentUser.displayName,
+                                                  title: currentUser
+                                                      .displayName,
 
-                                          uid: currentUser.uid,
+                                                  uid: currentUser.uid,
 
-                                        ))))
-
-                                .catchError((err) => print(err)))
-
+                                                ))))
+                                    .catchError((err) => print(err)))
                                 .catchError((err) => print(err));
-
                           }
-
                         },
 
                       ),
@@ -199,19 +179,32 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text("Register here!"),
 
                         onPressed: () {
-
                           Navigator.pushNamed(context, "/register");
-
                         },
 
-                      )
+                      ),
+                      RaisedButton(
+                        child: Text("GOOGLE"),
+                        splashColor: Colors.grey,
+                        onPressed: () {
+                          signInWithGoogle().whenComplete(() {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return MapPage();
+                                },
+                              ),
+                            );
+                          }
+                          );
+                        },
+                      ),
 
                     ],
 
                   ),
 
                 ))));
-
   }
 
 }
