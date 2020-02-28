@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "216852208432",
+    "firebase_url": "https://french-press-58ab2.firebaseio.com",
+    "project_id": "french-press-58ab2",
+    "storage_bucket": "french-press-58ab2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216852208432:android:4ef22c33e33200cb6486f5",
+        "android_client_info": {
+          "package_name": "com.example.frenchpress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216852208432-qqhpjt5p6cjc9qouohfie18lhv4kuv6s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEpq12U5ZdWylualj4ygw9DWbF_jCU4bg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216852208432-qqhpjt5p6cjc9qouohfie18lhv4kuv6s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
