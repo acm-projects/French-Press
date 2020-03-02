@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart'; // gets user's location
+
 
 //import 'Login.dart';
 
@@ -30,6 +32,7 @@ class MapPageState extends State<MapPage> {
 
   Completer<GoogleMapController> _controller = Completer();
 
+  Position position;
 
   @override
   void initState() {
@@ -42,6 +45,7 @@ class MapPageState extends State<MapPage> {
 
     setCustomMapPin();
     this.getCurrentUser();
+    getCurrentLocation();
 
     super.initState();
 
@@ -61,6 +65,12 @@ class MapPageState extends State<MapPage> {
         'assets/hehe.png');
   }
 
+  void getCurrentLocation() async {
+    Position res = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      position = res;
+    });
+  }
 
   LatLng pinPosition = LatLng(37.3797536, -122.1017334);
 
@@ -89,10 +99,6 @@ class MapPageState extends State<MapPage> {
 
               ),
 
-          // floatingActionButton: FloatingActionButton(
-           // onPressed: ()  => Navigator.pop(context),
-          //),
-
 
 
           body: Stack(
@@ -102,7 +108,7 @@ class MapPageState extends State<MapPage> {
                 initialCameraPosition: CameraPosition(
                     zoom: 16,
                     bearing: 30,
-                    target: pinPosition
+                    target: LatLng(position.latitude, position.longitude),
                 ),
 
                 myLocationEnabled: true,
