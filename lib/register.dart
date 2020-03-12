@@ -252,15 +252,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
                                     MaterialPageRoute(
 
-                                        builder: (context) => MapPage(
+                                        builder: (context) => HomePage(
 
                                           title:
 
-                                          firstNameInputController
-
-                                              .text +
-
-                                              "'s Tasks",
+                                         "coffe",
 
                                           uid: currentUser.uid,
 

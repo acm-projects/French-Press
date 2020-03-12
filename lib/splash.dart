@@ -58,7 +58,7 @@ class _SplashPageState extends State<SplashPage> {
 
                   MaterialPageRoute(
 
-                      builder: (context) => MapPage(
+                      builder: (context) => HomePage(
 
                         title: currentUser.displayName,
 

@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
 
         routes: <String, WidgetBuilder>{
 
-          '/home': (BuildContext context) => MapPage(title: 'Home'),
+          '/home': (BuildContext context) => HomePage(),
 
           '/login': (BuildContext context) => LoginPage(),
 

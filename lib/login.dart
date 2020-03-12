@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                                         MaterialPageRoute(
 
                                             builder: (context) =>
-                                                MapPage(
+                                                HomePage(
 
                                                   title: currentUser
                                                       .displayName,
@@ -189,9 +189,11 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           signInWithGoogle().whenComplete(() {
                             Navigator.of(context).push(
+                              //look up top for corrrection to get flow correctly
+
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return MapPage();
+                                  return HomePage();
                                 },
                               ),
                             );
