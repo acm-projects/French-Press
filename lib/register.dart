@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -102,245 +104,310 @@ class _RegisterPageState extends State<RegisterPage> {
 
     return Scaffold(
 
-        appBar: AppBar(
+        /*appBar: AppBar(
 
           title: Text("Register"),
 
-        ),
+        ),*/
 
         body: Container(
 
-            padding: const EdgeInsets.all(20.0),
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(15.0),
+            color: Color(0xFFDBCFC7),
 
-            child: SingleChildScrollView(
+              child: Container(
 
-                child: Form(
+                child: SingleChildScrollView(
 
-                  key: _registerFormKey,
+                    child: Column(
 
-                  child: Column(
-
-                    children: <Widget>[
-
-                      TextFormField(
-
-                        decoration: InputDecoration(
-
-                            labelText: 'First Name*', hintText: "John"),
-
-                        controller: firstNameInputController,
-
-                        validator: (value) {
-
-                          if (value.length < 3) {
-
-                            return "Please enter a valid first name.";
-
-                          }
-
-                        },
-
+                      children: <Widget>[
+                        //Image.asset('assets/AlexAssets/logo.png'),
+                        SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                              alignment: Alignment.topLeft,
+                              child: RichText(text: TextSpan(text: 'Sign up ',
+                                  style: TextStyle(fontFamily: 'Inria_Serif', fontSize: 40, fontWeight: FontWeight.normal, color: Color(0xFF442B2B)),
+                                  children: <TextSpan> [
+                                    TextSpan(text: 'here.', style: TextStyle(fontFamily: 'Inria_Serif', fontSize: 40, fontWeight: FontWeight.bold),),
+                                  ]),),
+                            ),
+                        ),
                       ),
 
-                      TextFormField(
+                      Container(
+                        alignment: Alignment.topCenter,
+                        padding: const EdgeInsets.all(8.0),
+                        width: 350.0,
+                        height: 615.0,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)),color: Colors.white),
+                        child: Form(
 
-                          decoration: InputDecoration(
+                          key: _registerFormKey,
 
-                              labelText: 'Last Name*', hintText: "Doe"),
+                          child: SafeArea(
+                              child: Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
 
-                          controller: lastNameInputController,
+                                      decoration: InputDecoration(
+                                          fillColor: Color(0xFF442B2B),
+                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20),borderSide: BorderSide(color: Color(0xFFDBCFC7))),
+                                          labelStyle: TextStyle(fontFamily: 'Montserrat', fontSize: 15, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color(0xFF442B2B)),
+                                          labelText: 'First Name*',),
+                                      controller: firstNameInputController,
+                                      validator: (value) {
+                                        if (value.length < 3) {
 
-                          validator: (value) {
+                                          return "Please enter a valid first name.";
 
-                            if (value.length < 3) {
+                                        }
 
-                              return "Please enter a valid last name.";
+                                      },
 
-                            }
+                                    ),
+                                  ),
 
-                          }),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
 
-                      TextFormField(
+                                        decoration: InputDecoration(
+                                            fillColor: Color(0xFF442B2B),
+                                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20),borderSide: BorderSide(color: Color(0xFFDBCFC7))),
+                                            labelStyle: TextStyle(fontFamily: 'Montserrat', fontSize: 15, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color(0xFF442B2B)),
+                                            labelText: 'Last Name*',),
 
-                        decoration: InputDecoration(
+                                        controller: lastNameInputController,
 
-                            labelText: 'Email*', hintText: "john.doe@gmail.com"),
+                                        validator: (value) {
 
-                        controller: emailInputController,
+                                          if (value.length < 3) {
 
-                        keyboardType: TextInputType.emailAddress,
+                                            return "Please enter a valid last name.";
 
-                        validator: emailValidator,
+                                          }
 
+                                        }),
+                                  ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+
+                                    child: TextFormField(
+
+                                      decoration: InputDecoration(
+                                          fillColor: Color(0xFF442B2B),
+                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20),borderSide: BorderSide(color: Color(0xFFDBCFC7))),
+                                          labelStyle: TextStyle(fontFamily: 'Montserrat', fontSize: 15, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color(0xFF442B2B)),
+                                          labelText: 'Email*',),
+
+                                      controller: emailInputController,
+
+                                      keyboardType: TextInputType.emailAddress,
+
+                                      validator: emailValidator,
+
+                                    ),
+                                  ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+
+                                      decoration: InputDecoration(
+                                          fillColor: Color(0xFF442B2B),
+                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20),borderSide: BorderSide(color: Color(0xFFDBCFC7))),
+                                          labelStyle: TextStyle(fontFamily: 'Montserrat', fontSize: 15, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color(0xFF442B2B)),
+                                          labelText: 'Password*',),
+                                      controller: pwdInputController,
+
+                                      obscureText: true,
+
+                                      validator: pwdValidator,
+
+                                    ),
+                                  ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+
+                                      decoration: InputDecoration(
+                                          fillColor: Color(0xFF442B2B),
+                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20),borderSide: BorderSide(color: Color(0xFFDBCFC7))),
+                                          labelStyle: TextStyle(fontFamily: 'Montserrat', fontSize: 15, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color(0xFF442B2B)),
+                                          labelText: 'Confirm Password*',),
+
+                                      controller: confirmPwdInputController,
+
+                                      obscureText: true,
+
+                                      validator: pwdValidator,
+
+                                    ),
+                                  ),
+
+
+
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: RaisedButton(
+
+                                      child: RichText(
+                                          text: TextSpan(text: 'SIGN UP', style: TextStyle(color: Colors.white, fontSize: 15.0, fontFamily: 'Montserrat', letterSpacing: 3.0),)),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
+
+                                      color: Colors.brown,
+
+                                      textColor: Colors.white,
+
+                                      onPressed: () {
+
+                                        if (_registerFormKey.currentState.validate()) {
+
+                                          if (pwdInputController.text ==
+
+                                              confirmPwdInputController.text) {
+
+                                            FirebaseAuth.instance
+
+                                                .createUserWithEmailAndPassword(
+
+                                                email: emailInputController.text,
+
+                                                password: pwdInputController.text)
+
+                                                .then((currentUser) => Firestore.instance
+
+                                                .collection("users")
+
+                                                .document(currentUser.uid)
+
+                                                .setData({
+
+                                              "uid": currentUser.uid,
+
+                                             // "fname": firstNameInputController.text,
+
+                                              "surname": lastNameInputController.text,
+
+                                              "email": emailInputController.text,
+
+                                            })
+
+                                                .then((result) => {
+
+                                              Navigator.pushAndRemoveUntil(
+
+                                                  context,
+
+                                                  MaterialPageRoute(
+
+                                                      builder: (context) => HomePage(
+
+                                                        title:
+
+                                                       "coffe",
+
+                                                        uid: currentUser.uid,
+
+                                                      )),
+
+                                                      (_) => false),
+
+                                              firstNameInputController.clear(),
+
+                                              lastNameInputController.clear(),
+
+                                              emailInputController.clear(),
+
+                                              pwdInputController.clear(),
+
+                                              confirmPwdInputController.clear()
+
+                                            })
+
+                                                .catchError((err) => print(err)))
+
+                                                .catchError((err) => print(err));
+
+                                          } else {
+
+                                            showDialog(
+
+                                                context: context,
+
+                                                builder: (BuildContext context) {
+
+                                                  return AlertDialog(
+
+                                                    title: Text("Error"),
+
+                                                    content: Text("The passwords do not match"),
+
+                                                    actions: <Widget>[
+
+                                                      FlatButton(
+
+                                                        child: Text("Close"),
+
+                                                        onPressed: () {
+
+                                                          Navigator.of(context).pop();
+
+                                                        },
+
+                                                      )
+
+                                                    ],
+
+                                                  );
+
+                                                });
+
+                                          }
+
+                                        }
+
+                                      },
+
+                                    ),
+                                  ),
+
+
+
+
+
+
+                                ],
+
+                              ),
+
+                          ),
+
+                        ),
                       ),
 
-                      TextFormField(
+                        FlatButton(
 
-                        decoration: InputDecoration(
+                          child: Text("Already have an account? Login here!", style: TextStyle(color: Color(0xFF442B2B), fontFamily: 'Montserrat', fontWeight: FontWeight.bold,)),
 
-                            labelText: 'Password*', hintText: "********"),
+                          onPressed: () {
 
-                        controller: pwdInputController,
+                            Navigator.pop(context);
 
-                        obscureText: true,
+                          },
 
-                        validator: pwdValidator,
-
-                      ),
-
-                      TextFormField(
-
-                        decoration: InputDecoration(
-
-                            labelText: 'Confirm Password*', hintText: "********"),
-
-                        controller: confirmPwdInputController,
-
-                        obscureText: true,
-
-                        validator: pwdValidator,
-
-                      ),
-
-                      RaisedButton(
-
-                        child: Text("Register"),
-
-                        color: Theme.of(context).primaryColor,
-
-                        textColor: Colors.white,
-
-                        onPressed: () {
-
-                          if (_registerFormKey.currentState.validate()) {
-
-                            if (pwdInputController.text ==
-
-                                confirmPwdInputController.text) {
-
-                              FirebaseAuth.instance
-
-                                  .createUserWithEmailAndPassword(
-
-                                  email: emailInputController.text,
-
-                                  password: pwdInputController.text)
-
-                                  .then((currentUser) => Firestore.instance
-
-                                  .collection("users")
-
-                                  .document(currentUser.uid)
-
-                                  .setData({
-
-                                "uid": currentUser.uid,
-
-                               // "fname": firstNameInputController.text,
-
-                                "surname": lastNameInputController.text,
-
-                                "email": emailInputController.text,
-
-                              })
-
-                                  .then((result) => {
-
-                                Navigator.pushAndRemoveUntil(
-
-                                    context,
-
-                                    MaterialPageRoute(
-
-                                        builder: (context) => HomePage(
-
-                                          title:
-
-                                         "coffe",
-
-                                          uid: currentUser.uid,
-
-                                        )),
-
-                                        (_) => false),
-
-                                firstNameInputController.clear(),
-
-                                lastNameInputController.clear(),
-
-                                emailInputController.clear(),
-
-                                pwdInputController.clear(),
-
-                                confirmPwdInputController.clear()
-
-                              })
-
-                                  .catchError((err) => print(err)))
-
-                                  .catchError((err) => print(err));
-
-                            } else {
-
-                              showDialog(
-
-                                  context: context,
-
-                                  builder: (BuildContext context) {
-
-                                    return AlertDialog(
-
-                                      title: Text("Error"),
-
-                                      content: Text("The passwords do not match"),
-
-                                      actions: <Widget>[
-
-                                        FlatButton(
-
-                                          child: Text("Close"),
-
-                                          onPressed: () {
-
-                                            Navigator.of(context).pop();
-
-                                          },
-
-                                        )
-
-                                      ],
-
-                                    );
-
-                                  });
-
-                            }
-
-                          }
-
-                        },
-
-                      ),
-
-                      Text("Already have an account?"),
-
-                      FlatButton(
-
-                        child: Text("Login here!"),
-
-                        onPressed: () {
-
-                          Navigator.pop(context);
-
-                        },
-
-                      )
-
-                    ],
-
-                  ),
-
-                ))));
+                        ),
+                    ],)),
+              ),
+            ));
 
   }
 

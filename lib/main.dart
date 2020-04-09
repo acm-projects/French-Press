@@ -25,11 +25,11 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
 
-        title: 'COFFE APP',
+        title: 'COFFEE APP',
 
         theme: ThemeData(
 
-          primarySwatch: Colors.green,
+          primarySwatch: Colors.grey,
 
         ),
 
@@ -42,6 +42,17 @@ class MyApp extends StatelessWidget {
           '/login': (BuildContext context) => LoginPage(),
 
           '/register': (BuildContext context) => RegisterPage(),
+
+          //'/settings': (BuildContext context) => SettingsPage(),
+          //'/blackForest': (BuildContext context) => blackForest(),
+          //'/1418': (BuildContext context) => 1418page(),
+          //'/cafeBrazil': (BuildContext context) => cafeBrazil(),
+          //'/houndstooth': (BuildContext context) => houndstooth(),
+          //'/iLove': (BuildContext context) => iLove(),
+          //'/meritCoffee': (BuildContext context) => meritCoffee(),
+          //'/pearlCup': (BuildContext context) => pearlCup(),
+          //'/whiteRock': (BuildContext context) => whiteRock(),
+
 
         });
 

@@ -69,39 +69,58 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      drawer: Drawer(
+        child: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              ListTile(
+                  title: Text('PROFILE', style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0),),
+                  onTap: () {
+                    //shit don't do nothing yet
+                    Navigator.pop(context);
+                  }
+              ),
+              ListTile(
+                title: Text('RETURN', style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0),),
+                onTap: () {
+                  Navigator.pop(context);
+                }
+              )
+              ,
 
-      appBar: AppBar(
+              ListTile(
+                title: Text('LOGOUT', style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0),),
+                onTap: () {
+                  FirebaseAuth.instance
+                      .signOut()
+                      .then((result) =>
+                      Navigator.pushReplacementNamed(context, "/login"))
+                      .catchError((err) => print(err));
+                },
+              ),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: ListTile(
+                  //shit don't do nothing yet
+                  //will make settings page soon yah
+                  leading: Icon(Icons.settings, color: Colors.black),
+                onTap: () {
+                    Navigator.pop(context);
+                },
+                ),
+              ),
+            ]
 
-        title: Text("French press"),
+          ),
+        )
       ),
-
-        floatingActionButton: Container(
-           padding: EdgeInsets.only(top: 100.0,left:50),
-           child: Align(alignment: Alignment.topLeft,
-
-
-
-          child: FloatingActionButton(
-             child: Text("Log Out"),
-          onPressed: () {
-
-
-
-            FirebaseAuth.instance
-                .signOut()
-                .then((result) =>
-                Navigator.pushReplacementNamed(context, "/login"))
-                .catchError((err) => print(err));
-
-          },//on pressed
-    )
-           )
-
-
-
-
-
-
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 8.0,
+        centerTitle: true,
+        title: Text('MAP', style: TextStyle(color: Colors.black, fontSize: 30, fontFamily: 'Montserrat', letterSpacing: 3.0),),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
       ),
 
       body: StreamBuilder<QuerySnapshot>(
@@ -314,9 +333,9 @@ class _StoreListTileState extends State<StoreListTile> {
 
       return ListTile(
 
-      title: Text(widget.document['name']),
+      title: Text(widget.document['name'], style: TextStyle(fontFamily: "Montserrat", fontSize: 17.5)),
 
-      subtitle: Text(widget.document['address']),
+      subtitle: Text(widget.document['address'], style: TextStyle(fontFamily: "Montserrat", fontSize: 12.5)),
 
       leading: Container(
 
@@ -328,7 +347,7 @@ class _StoreListTileState extends State<StoreListTile> {
 
           child: Image.network(_placePhotoUrl, fit: BoxFit.cover),
 
-          borderRadius: const BorderRadius.all(Radius.circular(2)),
+          borderRadius: const BorderRadius.all(Radius.circular(20.0)),
 
         )
 
@@ -336,19 +355,24 @@ class _StoreListTileState extends State<StoreListTile> {
 
           child: Icon(
 
-            Icons.android,
+            Icons.location_on,
 
-            color: Colors.white,
+            color: Colors.black,
 
           ),
 
-          backgroundColor: Colors.pink,
+          backgroundColor: Colors.white,
 
         ),
 
-        width: 100,
+        width: 50,
 
-        height: 60,
+        height: 50,
+
+      ),
+      trailing: IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.arrow_forward_ios, size: 15.0),
 
       ),
 
@@ -424,7 +448,7 @@ class MapPageState extends State<MapPage> {
 
     super.initState();
 
-    rootBundle.loadString('assets/silverMap.txt').then((string) {
+    rootBundle.loadString('assets/map.json').then((string) {
 
       _mapStyle = string;
 
@@ -441,7 +465,7 @@ class MapPageState extends State<MapPage> {
 
         ImageConfiguration(devicePixelRatio: 2.5),
 
-        'assets/hehe.png');
+        'assets/AlexAssets/hehe.png');
   }
 
   LatLng pinPosition = LatLng(37.3797536, -122.1017334);
