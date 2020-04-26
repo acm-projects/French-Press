@@ -69,16 +69,15 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body:
-                    Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(8.0),
-                    color: Color(0xFFDBCFC7),
-                    child: SingleChildScrollView(
-                    child:
-                      Column(
-
-
-                        children: <Widget>[
+        Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(8.0),
+          color: Color(0xFFDBCFC7),
+          child: SingleChildScrollView(
+            child:
+            Column(
+              children: <Widget>[
+                Image.asset("assets/AlexAssets/Logo_With_Text.png", width: 150, height: 150,),
                           Padding(
                             padding: const EdgeInsets.all(14.0),
                             child: Container(
@@ -89,7 +88,6 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                           ),
-
                           Form(
                           key: _loginFormKey,
                           child: SafeArea(

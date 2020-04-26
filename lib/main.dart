@@ -38,20 +38,16 @@ class MyApp extends StatelessWidget {
         routes: <String, WidgetBuilder>{
 
           '/home': (BuildContext context) => HomePage(),
-
           '/login': (BuildContext context) => LoginPage(),
-
           '/register': (BuildContext context) => RegisterPage(),
-
-          //'/settings': (BuildContext context) => SettingsPage(),
-          //'/blackForest': (BuildContext context) => blackForest(),
-          //'/1418': (BuildContext context) => 1418page(),
-          //'/cafeBrazil': (BuildContext context) => cafeBrazil(),
-          //'/houndstooth': (BuildContext context) => houndstooth(),
-          //'/iLove': (BuildContext context) => iLove(),
-          //'/meritCoffee': (BuildContext context) => meritCoffee(),
-          //'/pearlCup': (BuildContext context) => pearlCup(),
-          //'/whiteRock': (BuildContext context) => whiteRock(),
+          '/settings': (BuildContext context) => SettingsPage(),
+          '/1418': (BuildContext context) => Fourteenpage(),
+          '/Murray': (BuildContext context) => Murray(),
+          '/iLove': (BuildContext context) => iLove(),
+          '/meritCoffee': (BuildContext context) => meritCoffee(),
+          '/pearlCup': (BuildContext context) => pearlCup(),
+          '/whiteRock': (BuildContext context) => whiteRock(),
+          '/mudLeaf': (BuildContext context) => mudLeaf(),
 
 
         });
