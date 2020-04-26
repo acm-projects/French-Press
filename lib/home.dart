@@ -11,6 +11,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 
 String _mapStyle;
+bool DarkModeSwitch = true;
 
 
 class HomePage extends StatefulWidget {
@@ -438,14 +439,14 @@ class MapPageState extends State<MapPage> {
 
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   BitmapDescriptor pinLocationIcon;
+  GoogleMapController _controller;
+
+  bool isMapsCreated = false;
+
 
   @override
   void initState() {
     super.initState();
-
-    rootBundle.loadString('assets/map.json').then((string) {
-      _mapStyle = string;
-    });
 
     setCustomMapPin();
     populateClients();
@@ -504,8 +505,86 @@ class MapPageState extends State<MapPage> {
     });
   }
 
+  changeMapTheme(){
+    if(DarkModeSwitch){
+      rootBundle.loadString('assets/darkMode.json').then((string) {
+        _mapStyle = string;
+      });
+    }
+    else{
+      rootBundle.loadString('assets/lightMode.json').then((string) {
+        _mapStyle = string;
+      });
+    }
+
+  }
+
+  void setMapStyle() {
+    _controller.setMapStyle(_mapStyle);
+  }
   @override
   Widget build(BuildContext context) {
+    if (isMapsCreated) {
+      changeMapTheme();
+      setMapStyle();
+    }
+
+    return Container(
+      ///Getting size of the screen from [MediaQuery] inherited widget.
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Stack(
+        children: <Widget>[
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+
+                zoom: 16,
+
+                bearing: 30,
+                target: pinPosition
+
+            ),
+
+            markers: Set<Marker>.of(markers.values),
+
+            onMapCreated: (GoogleMapController controller) {
+              _controller = controller;
+
+              isMapsCreated = true;
+
+              changeMapTheme(); // checks dark mode
+              setMapStyle();  // sets new theme
+
+              this.widget.mapController.complete(_controller);
+            },
+
+          ),
+          Align(
+          alignment: Alignment.topRight,
+            child: IconButton(
+              icon: Icon(Icons.brightness_5),
+              tooltip: 'Increase volume by 10',
+              onPressed: () {
+                setState(() {
+                  if(DarkModeSwitch){
+                    DarkModeSwitch = false;
+                  }
+                  else{
+                    DarkModeSwitch = true;
+                  }
+                });
+
+                changeMapTheme();
+                print(DarkModeSwitch);
+              },
+            ),
+          ),
+
+
+        ],
+      ),
+    );
+
     return GoogleMap(
 
       initialCameraPosition: CameraPosition(
@@ -519,15 +598,21 @@ class MapPageState extends State<MapPage> {
 
       markers: Set<Marker>.of(markers.values),
 
-      onMapCreated: (mapController) {
-        mapController.setMapStyle(_mapStyle);
+      onMapCreated: (GoogleMapController controller) {
+        //mapController.setMapStyle(_mapStyle);
+        _controller = controller;
+        isMapsCreated = true;
 
-        this.widget.mapController.complete(mapController);
+        changeMapTheme(); // checks dark mode
+        setMapStyle();  // sets new theme
+
+        this.widget.mapController.complete(_controller);
       },
 
     );
   }
 }
+
 
 final PageController ctrl = PageController();
   class Fourteenpage extends StatelessWidget{
@@ -1666,7 +1751,6 @@ final PageController ctrl = PageController();
   class _SettingsPageState extends State<SettingsPage>{
     FirebaseUser CurrentUser;
     @override
-    bool DarkModeSwitch = false;
     bool LightModeSwitch = false;
     void initState(){
       super.initState();
@@ -1706,6 +1790,7 @@ final PageController ctrl = PageController();
                       onChanged: (value){
                         setState((){
                           DarkModeSwitch = value;
+
                           print(DarkModeSwitch);
                         });
                       },

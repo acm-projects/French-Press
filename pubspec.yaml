@@ -49,6 +49,9 @@ flutter:
     - assets/map.json
     - assets/AlexAssets/Google_Logo.png
     - assets/AlexAssets/French_Press_Logo.png
+    - assets/lightMode.json
+    - assets/darkMode.json
+
   fonts:
     - family: Montserrat
       fonts:
