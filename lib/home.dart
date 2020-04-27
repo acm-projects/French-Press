@@ -89,17 +89,22 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 }
               ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: ListTile(
-                  //shit don't do nothing yet
-                  //will make settings page soon yah
-                  //title: Icon(Icons.settings, color: Colors.black),
-                  leading: Text('SETTINGS', style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0),),
-                onTap: () {
-                    Navigator.pushNamed(context, "/settings");
-                },
-                ),
+              Container(
+                height: 470,
+              ),
+              RaisedButton(
+                  child: RichText(
+                      text: TextSpan(text: 'LOGOUT', style: TextStyle(color: Colors.white, fontSize: 15, fontFamily: 'Montserrat', letterSpacing: 3.0),)),
+                  color: Colors.brown,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+
+                  onPressed: (){
+                    FirebaseAuth.instance
+                        .signOut()
+                        .then((result) =>
+                        Navigator.pushReplacementNamed(context, "/login"))
+                        .catchError((err) => print(err));
+                  }
               ),
             ]
 
