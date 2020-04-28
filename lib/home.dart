@@ -11,7 +11,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 
 String _mapStyle;
-bool DarkModeSwitch = true;
+bool DarkModeSwitch = false;
 
 
 class HomePage extends StatefulWidget {
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
 
     this.getCurrentUser();
 
-
+DarkModeSwitch = false;
 
     _cafes= Firestore.instance
 
@@ -72,30 +72,47 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       drawer: Drawer(
-        child: SafeArea(
-          child: ListView(
-            padding: EdgeInsets.zero,
+          child: Container(
+            color: DarkModeSwitch ? Color.fromARGB(255,23,31,37): Colors.white,
+
+            child: ListView(
+              padding: EdgeInsets.zero,
             children: <Widget>[
               ListTile(
-                  title: Text('ABOUT US', style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0),),
+//                  title: DarkModeSwitch ? Text('MAP', style: TextStyle(color: Colors.white, fontSize: 30, fontFamily: 'Montserrat', letterSpacing: 3.0)) : Text('MAP', style: TextStyle(color: Colors.black, fontSize: 30, fontFamily: 'Montserrat', letterSpacing: 3.0)),
+
+                  title: DarkModeSwitch?  Text('ABOUT US', style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0)) : Text('ABOUT US', style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0)),
                   onTap: () {
                     //shit don't do nothing yet
                     Navigator.pop(context);
                   }
               ),
               ListTile(
-                title: Text('FAVORITES', style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0),),
+                title: DarkModeSwitch ? Text('FAVORITES', style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0)) : Text('FAVORITES', style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0)),
                 onTap: () {
                   Navigator.pop(context);
                 }
               ),
+              Switch(
+                value: DarkModeSwitch,
+                onChanged: (value) {
+                  setState(() {
+                    DarkModeSwitch = value;
+                  });
+                  print(DarkModeSwitch);
+
+                },
+                inactiveTrackColor: Colors.white,
+                activeTrackColor: Colors.black54,
+                activeColor: Colors.white,
+              ),
               Container(
-                height: 470,
+                height: 430,
               ),
               RaisedButton(
                   child: RichText(
-                      text: TextSpan(text: 'LOGOUT', style: TextStyle(color: Colors.white, fontSize: 15, fontFamily: 'Montserrat', letterSpacing: 3.0),)),
-                  color: Colors.brown,
+                      text: DarkModeSwitch ? TextSpan(text: 'LOGOUT', style: TextStyle(color: Colors.black, fontSize: 15, fontFamily: 'Montserrat', letterSpacing: 3.0)) : TextSpan(text: 'LOGOUT', style: TextStyle(color: Colors.white, fontSize: 15, fontFamily: 'Montserrat', letterSpacing: 3.0))) ,
+                  color: DarkModeSwitch ? Colors.white : Colors.brown,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
 
                   onPressed: (){
@@ -112,11 +129,10 @@ class _HomePageState extends State<HomePage> {
         )
       ),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: DarkModeSwitch ? Color.fromARGB(255,23,31,37): Colors.white,
         elevation: 8.0,
         centerTitle: true,
-        title: Text('MAP', style: TextStyle(color: Colors.black, fontSize: 30, fontFamily: 'Montserrat', letterSpacing: 3.0),),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
+        title: DarkModeSwitch ? Text('MAP', style: TextStyle(color: Colors.white, fontSize: 30, fontFamily: 'Montserrat', letterSpacing: 3.0)) : Text('MAP', style: TextStyle(color: Colors.black, fontSize: 30, fontFamily: 'Montserrat', letterSpacing: 3.0)),
       ),
 
       body: StreamBuilder<QuerySnapshot>(
@@ -345,11 +361,11 @@ class _StoreListTileState extends State<StoreListTile> {
 
             Icons.location_on,
 
-            color: Colors.black,
+            color: !DarkModeSwitch ? Color.fromARGB(255,23,31,37): Colors.white,
 
           ),
 
-          backgroundColor: Colors.white,
+          backgroundColor: DarkModeSwitch ? Color.fromARGB(255,23,31,37): Colors.white,
 
         ),
 
@@ -452,6 +468,9 @@ class MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+    rootBundle.loadString('assets/lightMode.json').then((string) {
+      _mapStyle = string;
+    });
 
     setCustomMapPin();
     populateClients();
@@ -459,13 +478,6 @@ class MapPageState extends State<MapPage> {
 
   void setCustomMapPin() async {
     Icon(Icons.location_on);
-    /*
-    pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 2.5),
-
-        'assets/AlexAssets/hehe.png');
-
-     */
   }
 
   LatLng pinPosition = LatLng(37.3797536, -122.1017334);
@@ -511,7 +523,7 @@ class MapPageState extends State<MapPage> {
   }
 
   changeMapTheme(){
-    if(DarkModeSwitch){
+    if(!DarkModeSwitch){
       rootBundle.loadString('assets/darkMode.json').then((string) {
         _mapStyle = string;
       });
@@ -533,63 +545,6 @@ class MapPageState extends State<MapPage> {
       changeMapTheme();
       setMapStyle();
     }
-
-    return Container(
-      ///Getting size of the screen from [MediaQuery] inherited widget.
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Stack(
-        children: <Widget>[
-          GoogleMap(
-            initialCameraPosition: CameraPosition(
-
-                zoom: 16,
-
-                bearing: 30,
-                target: pinPosition
-
-            ),
-
-            markers: Set<Marker>.of(markers.values),
-
-            onMapCreated: (GoogleMapController controller) {
-              _controller = controller;
-
-              isMapsCreated = true;
-
-              changeMapTheme(); // checks dark mode
-              setMapStyle();  // sets new theme
-
-              this.widget.mapController.complete(_controller);
-            },
-
-          ),
-          Align(
-          alignment: Alignment.topRight,
-            child: IconButton(
-              icon: Icon(Icons.brightness_5),
-              tooltip: 'Increase volume by 10',
-              onPressed: () {
-                setState(() {
-                  if(DarkModeSwitch){
-                    DarkModeSwitch = false;
-                  }
-                  else{
-                    DarkModeSwitch = true;
-                  }
-                });
-
-                changeMapTheme();
-                print(DarkModeSwitch);
-              },
-            ),
-          ),
-
-
-        ],
-      ),
-    );
-
     return GoogleMap(
 
       initialCameraPosition: CameraPosition(
@@ -604,12 +559,14 @@ class MapPageState extends State<MapPage> {
       markers: Set<Marker>.of(markers.values),
 
       onMapCreated: (GoogleMapController controller) {
-        //mapController.setMapStyle(_mapStyle);
         _controller = controller;
+
         isMapsCreated = true;
 
+        DarkModeSwitch =false;
         changeMapTheme(); // checks dark mode
-        setMapStyle();  // sets new theme
+
+        _controller.setMapStyle(_mapStyle);
 
         this.widget.mapController.complete(_controller);
       },
