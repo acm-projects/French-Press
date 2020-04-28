@@ -40,7 +40,6 @@ class MyApp extends StatelessWidget {
           '/home': (BuildContext context) => HomePage(),
           '/login': (BuildContext context) => LoginPage(),
           '/register': (BuildContext context) => RegisterPage(),
-          '/settings': (BuildContext context) => SettingsPage(),
           '/1418': (BuildContext context) => Fourteenpage(),
           '/Murray': (BuildContext context) => Murray(),
           '/iLove': (BuildContext context) => iLove(),

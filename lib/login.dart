@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                           Padding(
                             padding: const EdgeInsets.all(14.0),
                             child: Container(
-                              alignment: Alignment.topLeft,
+                              alignment: Alignment.topCenter,
                               child: RichText(
                                 text: TextSpan(text: "Welcome.", style: TextStyle(fontFamily: "Inria_Serif", fontSize: 50, fontWeight: FontWeight.bold, color: Color(0xFF442B2B)),
                                 ),

@@ -122,6 +122,7 @@ DarkModeSwitch = false;
                         Navigator.pushReplacementNamed(context, "/login"))
                         .catchError((err) => print(err));
                   }
+
               ),
             ]
 
@@ -563,11 +564,8 @@ class MapPageState extends State<MapPage> {
 
         isMapsCreated = true;
 
-        DarkModeSwitch =false;
-        changeMapTheme(); // checks dark mode
-
         _controller.setMapStyle(_mapStyle);
-
+      
         this.widget.mapController.complete(_controller);
       },
 
@@ -1695,130 +1693,4 @@ final PageController ctrl = PageController();
     );
   }
   }
-
-
-
-  class SettingsPage extends StatefulWidget {
-
-  SettingsPage({Key key}) : super(key: key);
-
-
-
-  @override
-
-  _SettingsPageState createState() => _SettingsPageState();
-
-  }
-
-  class _SettingsPageState extends State<SettingsPage>{
-    FirebaseUser CurrentUser;
-    @override
-    bool LightModeSwitch = false;
-    void initState(){
-      super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context){
-      return Scaffold(
-        body: SafeArea(
-          child: Container(
-            alignment: Alignment.center,
-            color: Color(0xFFDBCFC7),
-            child: Column( children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Container(
-                  alignment: Alignment.topLeft,
-                  child: RichText(
-                    text: TextSpan(text: "Settings.", style: TextStyle(fontFamily: "Inria_Serif", fontSize: 50, fontWeight: FontWeight.bold, color: Color(0xFF442B2B)),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(8.0),
-              width: 350.0,
-              height: 250.0,
-              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)),color: Colors.white),
-              child: Stack(
-                children: <Widget> [
-
-                  ListView(children: [
-                    SwitchListTile(
-                      title: const Text('DARK MODE', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0),),
-                      value: DarkModeSwitch,
-                      onChanged: (value){
-                        setState((){
-                          DarkModeSwitch = value;
-
-                          print(DarkModeSwitch);
-                        });
-                      },
-                        activeTrackColor: Color(0xFFDBCFC7),
-                        activeColor: Colors.brown,
-                      ),
-                    SwitchListTile(
-                      title: const Text('LIGHT MODE', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0),),
-                      value: LightModeSwitch,
-                      onChanged: (value){
-                        setState((){
-                          LightModeSwitch = value;
-                          print(LightModeSwitch);
-                        });
-                      },
-                      activeTrackColor: Color(0xFFDBCFC7),
-                      activeColor: Colors.brown,
-                    ),
-
-
-      ] ,
-
-                  scrollDirection: Axis.vertical,
-                ),
-            ],
-
-
-
-                ),
-      ),
-              RaisedButton(
-                  child: RichText(
-                      text: TextSpan(text: 'LOGOUT', style: TextStyle(color: Colors.white, fontSize: 15, fontFamily: 'Montserrat', letterSpacing: 3.0),)),
-                  color: Colors.brown,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-
-                  onPressed: (){
-                    FirebaseAuth.instance
-                        .signOut()
-                        .then((result) =>
-                        Navigator.pushReplacementNamed(context, "/login"))
-                        .catchError((err) => print(err));
-                  }
-              ),
-
-          ],
-
-            ),
-          ),
-        )
-      );
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
