@@ -77,22 +77,21 @@ class _LoginPageState extends State<LoginPage> {
             child:
             Column(
               children: <Widget>[
-                Image.asset("assets/AlexAssets/Logo_With_Text.png", width: 150, height: 150,),
-                          Padding(
-                            padding: const EdgeInsets.all(14.0),
-                            child: Container(
-                              alignment: Alignment.topCenter,
-                              child: RichText(
-                                text: TextSpan(text: "Welcome.", style: TextStyle(fontFamily: "Inria_Serif", fontSize: 50, fontWeight: FontWeight.bold, color: Color(0xFF442B2B)),
-                                ),
-                              ),
-                            ),
-                          ),
+                Image.asset("assets/AlexAssets/DavidO_FrenchPress.png", width: 550, height: 220,),
+//                          Padding(
+//                            padding: const EdgeInsets.all(10.0),
+//                            child: Container(
+//                              alignment: Alignment.topCenter,
+//                                child: RichText(
+//                                  text: TextSpan(text: "Welcome.", style: TextStyle(fontFamily: "Inria_Serif", fontSize: 50, fontWeight: FontWeight.bold, color: Color(0xFF442B2B)),
+//                                  ),
+//                              ),
+//                            ),
+//                          ),
                           Form(
                           key: _loginFormKey,
                           child: SafeArea(
-                                  child:
-                                  Container(
+                                  child: Container(
                                     child: Stack(
                                         children: <Widget>[
                                           Container(

@@ -49,6 +49,7 @@ flutter:
     - assets/map.json
     - assets/AlexAssets/Google_Logo.png
     - assets/AlexAssets/French_Press_Logo.png
+    - assets/AlexAssets/DavidO_FrenchPress.png
     - assets/lightMode.json
     - assets/darkMode.json
 

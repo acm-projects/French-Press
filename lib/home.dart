@@ -565,7 +565,7 @@ class MapPageState extends State<MapPage> {
         isMapsCreated = true;
 
         _controller.setMapStyle(_mapStyle);
-      
+
         this.widget.mapController.complete(_controller);
       },
 
