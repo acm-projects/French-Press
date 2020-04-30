@@ -45,9 +45,44 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   assets:
-    - assets/hehe.png
-    - assets/silverMap.txt
+    - assets/AlexAssets/Logo_With_Text.png
+    - assets/map.json
+    - assets/AlexAssets/Google_Logo.png
+    - assets/AlexAssets/French_Press_Logo.png
+    - assets/AlexAssets/DavidO_FrenchPress.png
+    - assets/lightMode.json
+    - assets/darkMode.json
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/Montserrat/Montserrat-Black.ttf
+        - asset: assets/Montserrat/Montserrat-Bold.ttf
+          weight: 800
+        - asset: assets/Montserrat/Montserrat-ExtraLight.ttf
+          weight: 400
+        - asset: assets/Montserrat/Montserrat-Regular.ttf
+          weight: 200
+    - family: Inria_Serif
+      fonts:
+        - asset: assets/Inria_Serif/InriaSerif-Bold.ttf
+          weight: 800
+        - asset: assets/Inria_Serif/InriaSerif-BoldItalic.ttf
+          style: italic
+    - family: Lora
+      fonts:
+        - asset: assets/Lora/Lora-VariableFont_wght.ttf
+        - asset: assets/Lora/static/Lora-Bold.ttf
+    - family: Merriweather
+      fonts:
+        - asset: assets/Merriweather/Merriweather-Light.ttf
+    - family: Noto_Sans
+      fonts:
+        - asset: assets/Noto_Sans/NotoSans-Regular.ttf
+
+
   uses-material-design: true
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
@@ -65,7 +100,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
-  #   - family: Schyler
+  #  - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
@@ -74,7 +109,6 @@ flutter:
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
+  #         weight: 70    
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

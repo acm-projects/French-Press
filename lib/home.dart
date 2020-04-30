@@ -1,3 +1,4 @@
+import 'package:frenchpress/cafe.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 
 String _mapStyle;
+bool DarkModeSwitch = false;
 
 
 class HomePage extends StatefulWidget {
@@ -47,7 +49,7 @@ class _HomePageState extends State<HomePage> {
 
     this.getCurrentUser();
 
-
+DarkModeSwitch = false;
 
     _cafes= Firestore.instance
 
@@ -69,39 +71,69 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      drawer: Drawer(
+          child: Container(
+            color: DarkModeSwitch ? Color.fromARGB(255,23,31,37): Colors.white,
 
-      appBar: AppBar(
+            child: ListView(
+              padding: EdgeInsets.zero,
+            children: <Widget>[
+              ListTile(
+//                  title: DarkModeSwitch ? Text('MAP', style: TextStyle(color: Colors.white, fontSize: 30, fontFamily: 'Montserrat', letterSpacing: 3.0)) : Text('MAP', style: TextStyle(color: Colors.black, fontSize: 30, fontFamily: 'Montserrat', letterSpacing: 3.0)),
 
-        title: Text("French press"),
+                  title: DarkModeSwitch?  Text('ABOUT US', style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0)) : Text('ABOUT US', style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0)),
+                  onTap: () {
+                    //shit don't do nothing yet
+                    Navigator.pop(context);
+                  }
+              ),
+              ListTile(
+                title: DarkModeSwitch ? Text('FAVORITES', style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0)) : Text('FAVORITES', style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 3.0)),
+                onTap: () {
+                  Navigator.pop(context);
+                }
+              ),
+              Switch(
+                value: DarkModeSwitch,
+                onChanged: (value) {
+                  setState(() {
+                    DarkModeSwitch = value;
+                  });
+                  print(DarkModeSwitch);
+
+                },
+                inactiveTrackColor: Colors.white,
+                activeTrackColor: Colors.black54,
+                activeColor: Colors.white,
+              ),
+              Container(
+                height: 430,
+              ),
+              RaisedButton(
+                  child: RichText(
+                      text: DarkModeSwitch ? TextSpan(text: 'LOGOUT', style: TextStyle(color: Colors.black, fontSize: 15, fontFamily: 'Montserrat', letterSpacing: 3.0)) : TextSpan(text: 'LOGOUT', style: TextStyle(color: Colors.white, fontSize: 15, fontFamily: 'Montserrat', letterSpacing: 3.0))) ,
+                  color: DarkModeSwitch ? Colors.white : Colors.brown,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+
+                  onPressed: (){
+                    FirebaseAuth.instance
+                        .signOut()
+                        .then((result) =>
+                        Navigator.pushReplacementNamed(context, "/login"))
+                        .catchError((err) => print(err));
+                  }
+
+              ),
+            ]
+
+          ),
+        )
       ),
-
-        floatingActionButton: Container(
-           padding: EdgeInsets.only(top: 100.0,left:50),
-           child: Align(alignment: Alignment.topLeft,
-
-
-
-          child: FloatingActionButton(
-             child: Text("Log Out"),
-          onPressed: () {
-
-
-
-            FirebaseAuth.instance
-                .signOut()
-                .then((result) =>
-                Navigator.pushReplacementNamed(context, "/login"))
-                .catchError((err) => print(err));
-
-          },//on pressed
-    )
-           )
-
-
-
-
-
-
+      appBar: AppBar(
+        backgroundColor: DarkModeSwitch ? Color.fromARGB(255,23,31,37): Colors.white,
+        elevation: 8.0,
+        centerTitle: true,
+        title: DarkModeSwitch ? Text('MAP', style: TextStyle(color: Colors.white, fontSize: 30, fontFamily: 'Montserrat', letterSpacing: 3.0)) : Text('MAP', style: TextStyle(color: Colors.black, fontSize: 30, fontFamily: 'Montserrat', letterSpacing: 3.0)),
       ),
 
       body: StreamBuilder<QuerySnapshot>(
@@ -290,8 +322,6 @@ class _StoreListTileState extends State<StoreListTile> {
 
   }
 
-
-
   @override
 
   void dispose() {
@@ -301,12 +331,6 @@ class _StoreListTileState extends State<StoreListTile> {
     super.dispose();
 
   }
-
-
-
-
-
-
   @override
 
   Widget build(BuildContext context) {
@@ -314,9 +338,9 @@ class _StoreListTileState extends State<StoreListTile> {
 
       return ListTile(
 
-      title: Text(widget.document['name']),
+      title: Text(widget.document['name'], style: TextStyle(fontFamily: "Montserrat", fontSize: 17.5)),
 
-      subtitle: Text(widget.document['address']),
+      subtitle: Text(widget.document['address'], style: TextStyle(fontFamily: "Montserrat", fontSize: 12.5)),
 
       leading: Container(
 
@@ -328,7 +352,7 @@ class _StoreListTileState extends State<StoreListTile> {
 
           child: Image.network(_placePhotoUrl, fit: BoxFit.cover),
 
-          borderRadius: const BorderRadius.all(Radius.circular(2)),
+          borderRadius: const BorderRadius.all(Radius.circular(20.0)),
 
         )
 
@@ -336,19 +360,39 @@ class _StoreListTileState extends State<StoreListTile> {
 
           child: Icon(
 
-            Icons.android,
+            Icons.location_on,
 
-            color: Colors.white,
+            color: !DarkModeSwitch ? Color.fromARGB(255,23,31,37): Colors.white,
 
           ),
 
-          backgroundColor: Colors.pink,
+          backgroundColor: DarkModeSwitch ? Color.fromARGB(255,23,31,37): Colors.white,
 
         ),
 
-        width: 100,
+        width: 50,
 
-        height: 60,
+        height: 50,
+
+      ),
+      trailing: IconButton(
+        onPressed: () {
+           if(widget.document.documentID == "1418 Coffee House")
+              Navigator.pushNamed(context, "/1418");
+           else if (widget.document.documentID == "I Love U A-Latte")
+             Navigator.pushNamed(context, "/iLove");
+           else if (widget.document.documentID == "Merit Coffee Co.")
+             Navigator.pushNamed(context, "/meritCoffee");
+           else if (widget.document.documentID == "MudLeaf")
+             Navigator.pushNamed(context, "/mudLeaf");
+           else if (widget.document.documentID == "Murray Street Coffee Shop")
+             Navigator.pushNamed(context, "/Murray");
+           else if (widget.document.documentID == "Pearl Cup Coffee")
+             Navigator.pushNamed(context, "/pearlCup");
+           else if (widget.document.documentID == "White Rock Castle")
+             Navigator.pushNamed(context, "/whiteRock");
+        },
+        icon: Icon(Icons.arrow_forward_ios, size: 15.0),
 
       ),
 
@@ -417,62 +461,53 @@ class MapPageState extends State<MapPage> {
 
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   BitmapDescriptor pinLocationIcon;
+  GoogleMapController _controller;
+
+  bool isMapsCreated = false;
+
 
   @override
-
   void initState() {
-
     super.initState();
-
-    rootBundle.loadString('assets/silverMap.txt').then((string) {
-
+    rootBundle.loadString('assets/lightMode.json').then((string) {
       _mapStyle = string;
-
     });
 
     setCustomMapPin();
     populateClients();
-
-
   }
 
   void setCustomMapPin() async {
-    pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-
-        ImageConfiguration(devicePixelRatio: 2.5),
-
-        'assets/hehe.png');
+    Icon(Icons.location_on);
   }
 
   LatLng pinPosition = LatLng(37.3797536, -122.1017334);
+  String travel;
 
-  void populateClients(){
-   Firestore.instance
+  void populateClients() {
+    Firestore.instance
 
         .collection('cafes')
 
         .getDocuments()
 
-        .then((docs){
-          if(docs.documents.isNotEmpty){
-            for(int i = 0; i <docs.documents.length; ++i)
-              {
-                initMarker(docs.documents[i].data, docs.documents[i].documentID);
-              }
-          }
-   });
-
+        .then((docs) {
+      if (docs.documents.isNotEmpty) {
+        for (int i = 0; i < docs.documents.length; ++i) {
+          initMarker(docs.documents[i].data, docs.documents[i].documentID);
+        }
+      }
+    });
   }
 
-  void initMarker(request, requestId)
-  {
+  void initMarker(request, requestId) {
     var markerIdVal = requestId;
     final MarkerId markerId = MarkerId(markerIdVal);
     final Marker marker = Marker(
       icon: pinLocationIcon,
       markerId: markerId,
       position:
-      LatLng(request['location'].latitude,request['location'].longitude),
+      LatLng(request['location'].latitude, request['location'].longitude),
       infoWindow: InfoWindow(
 
         title: request['name'],
@@ -485,49 +520,1177 @@ class MapPageState extends State<MapPage> {
     setState(() {
       markers[markerId] = marker;
       print(markerId);
-
     });
   }
 
+  changeMapTheme(){
+    if(!DarkModeSwitch){
+      rootBundle.loadString('assets/darkMode.json').then((string) {
+        _mapStyle = string;
+      });
+    }
+    else{
+      rootBundle.loadString('assets/lightMode.json').then((string) {
+        _mapStyle = string;
+      });
+    }
+
+  }
+
+  void setMapStyle() {
+    _controller.setMapStyle(_mapStyle);
+  }
   @override
   Widget build(BuildContext context) {
-
+    if (isMapsCreated) {
+      changeMapTheme();
+      setMapStyle();
+    }
     return GoogleMap(
 
       initialCameraPosition: CameraPosition(
 
-        zoom: 16,
+          zoom: 16,
 
-        bearing: 30,
+          bearing: 30,
           target: pinPosition
 
       ),
 
       markers: Set<Marker>.of(markers.values),
 
-      onMapCreated: (mapController) {
-        mapController.setMapStyle(_mapStyle);
+      onMapCreated: (GoogleMapController controller) {
+        _controller = controller;
 
-        this.widget.mapController.complete(mapController);
+        isMapsCreated = true;
 
+        _controller.setMapStyle(_mapStyle);
+
+        this.widget.mapController.complete(_controller);
       },
 
     );
-
   }
-
 }
 
 
+final PageController ctrl = PageController();
+  class Fourteenpage extends StatelessWidget{
+
+    @override
+    Widget build(BuildContext context)
+    {
+      return MaterialApp(
+          home: Scaffold(
+            body:
+            PageView(
+              scrollDirection: Axis.horizontal,
+              controller: ctrl,
+              children: [
+                Container(
+                    color: Color(0xFFDBCFC7),
+                    child:
+                    Column(
+                      children: <Widget> [
+                        Padding(padding: const EdgeInsets.all(30.0), child: Container(alignment: Alignment.topLeft, child: SafeArea( child: Text('About the shop.',textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Inria_Serif", fontSize: 40, color: Color(0xFF442B2B)))))),
+                        SafeArea(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget> [
+                              Container(
+                                  alignment: Alignment.center,
+                                  width: 350.0,
+                                  height: 500.0,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)),color: Colors.white),
+                                  child: Stack (children:
+                                    <Widget> [
+                                      StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                                          builder: (context, snapshot){
+                                            if (!snapshot.hasData) return Text('Loading data');
+                                            return
+                                              ListView(
+                                                children: <Widget>[
+                                                  ListTile(
+                                                      title: Text('AESTHETIC', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                      subtitle:
+                                                        ClipRRect(
+                                                          borderRadius: BorderRadius.circular(8),
+                                                          child: Container(
+                                                            height: 10,
+                                                            child: LinearProgressIndicator(
+                                                            value: (snapshot.data.documents[0]['aesthetic']/10.0),
+                                                            backgroundColor: Color(0xFF442B2B),
+                                                            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                                      ),
+                                                          ),
+                                                        ),
+                                                  ),
+                                                  ListTile(
+                                                    title: Text('FOOD', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                    subtitle:
+                                                    ClipRRect(
+                                                      borderRadius: BorderRadius.circular(8),
+                                                      child: Container(
+                                                        height: 10,
+                                                        child: LinearProgressIndicator(
+                                                          value: (snapshot.data.documents[0]['food']/10.0),
+                                                          backgroundColor: Color(0xFF442B2B),
+                                                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ListTile(
+                                                    title: Text('QUALITY', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                    subtitle:
+                                                    ClipRRect(
+                                                      borderRadius: BorderRadius.circular(8),
+                                                      child: Container(
+                                                        height: 10,
+                                                        child: LinearProgressIndicator(
+                                                          value: (snapshot.data.documents[0]['quality']/10.0),
+                                                          backgroundColor: Color(0xFF442B2B),
+                                                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ListTile(
+                                                    title: Text('MEAL OPTIONS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                    trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                                  ),
+                                                  ListTile(
+                                                    title: Text('OUTLETS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                    trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                                  ),
+                                                  ListTile(
+                                                    title: Text('WIFI', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                    trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                                  ),
+                                                  ListTile(
+                                                    title: Text('SEATING', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                    trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                                  ),
+                                                  ListTile(
+                                                    title: Text('CHILL VIBES', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                    trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                                  ),
+                                                ],
+                                              );
+                                          }
+                                      ),
+                                    ],
+
+                                  ),
+                              ),
+                  ],
+
+                              ),
+                        ),
+
+      ],
+                    ),
+
+      ),
+
+                Container(
+                  alignment: Alignment.center,
+                  color: Color(0xFFDBCFC7),
+                  child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                  StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return Text('Loading data');
+                    return
+                      SafeArea(
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: 350.0,
+                          height: 300.0,
+                          child: Text(snapshot.data.documents[0]['address'].toUpperCase(), textAlign: TextAlign.center, style: TextStyle(color: Color(0xFF442B2B), fontSize: 40, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)), color: Colors.white,
+                          ),
+                    ),
+                      );
+
+                  }
+                  ),
+                  ],
+    ),
+                  ),
+
+
+    ],
 
 
 
 
+          ),
+          ),
+      );
+    }
+
+  }
+  class iLove extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) { return MaterialApp(
+        home: Scaffold(
+            body: PageView(
+                scrollDirection: Axis.horizontal,
+                controller: ctrl,
+                children: [
+                  Container(
+                    color: Color(0xFFDBCFC7),
+                    child:
+                    Column(
+                      children: <Widget> [
+                        Padding(padding: const EdgeInsets.all(30.0), child: Container(alignment: Alignment.topLeft, child: SafeArea( child: Text('About the shop.',textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Inria_Serif", fontSize: 40, color: Color(0xFF442B2B)))))),
+                        SafeArea(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget> [
+                              Container(
+                                alignment: Alignment.center,
+                                width: 350.0,
+                                height: 500.0,
+                                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)),color: Colors.white),
+                                child: Stack (children:
+                                <Widget> [
+                                  StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                                      builder: (context, snapshot){
+                                        if (!snapshot.hasData) return Text('Loading data');
+                                        return
+                                          ListView(
+                                            children: <Widget>[
+                                              ListTile(
+                                                title: Text('AESTHETIC', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                subtitle:
+                                                ClipRRect(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                  child: Container(
+                                                    height: 10,
+                                                    child: LinearProgressIndicator(
+                                                      value: (snapshot.data.documents[1]['aesthetic']/10.0),
+                                                      backgroundColor: Color(0xFF442B2B),
+                                                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                title: Text('FOOD', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                subtitle:
+                                                ClipRRect(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                  child: Container(
+                                                    height: 10,
+                                                    child: LinearProgressIndicator(
+                                                      value: (snapshot.data.documents[1]['food']/10.0),
+                                                      backgroundColor: Color(0xFF442B2B),
+                                                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                title: Text('QUALITY', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                subtitle:
+                                                ClipRRect(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                  child: Container(
+                                                    height: 10,
+                                                    child: LinearProgressIndicator(
+                                                      value: (snapshot.data.documents[1]['quality']/10.0),
+                                                      backgroundColor: Color(0xFF442B2B),
+                                                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                title: Text('MEAL OPTIONS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                              ),
+                                              ListTile(
+                                                title: Text('OUTLETS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                              ),
+                                              ListTile(
+                                                title: Text('WIFI', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                              ),
+                                              ListTile(
+                                                title: Text('SEATING', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                              ),
+                                              ListTile(
+                                                title: Text('CHILL VIBES', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                                trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                              ),
+                                            ],
+                                          );
+                                      }
+                                  ),
+                                ],
+
+                                ),
+                              ),
+                            ],
+
+                          ),
+                        ),
+
+                      ],
+                    ),
+
+                  ),
+
+                  Container(
+                    alignment: Alignment.center,
+                    color: Color(0xFFDBCFC7),
+                    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                      StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) return Text('Loading data');
+                            return
+                              SafeArea(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 350.0,
+                                  height: 300.0,
+                                  child: Text(snapshot.data.documents[1]['address'].toUpperCase(), textAlign: TextAlign.center, style: TextStyle(color: Color(0xFF442B2B), fontSize: 40, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)), color: Colors.white,
+                                  ),
+                                ),
+                              );
+
+                          }
+                      ),
+                    ],
+                    ),
+                  ),
+
+
+                ],
+
+
+            )
+        )
+
+    );
+    }
+  }
+
+  class meritCoffee extends StatelessWidget{
+  @override
+  Widget build(BuildContext context)
+  {
+  return Scaffold(
+    body:
+      PageView(
+        scrollDirection: Axis.horizontal,
+        controller: ctrl,
+        children: [
+          Container(
+            color: Color(0xFFDBCFC7),
+            child:
+            Column(
+              children: <Widget> [
+                Padding(padding: const EdgeInsets.all(30.0), child: Container(alignment: Alignment.topLeft, child: SafeArea( child: Text('About the shop.',textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Inria_Serif", fontSize: 40, color: Color(0xFF442B2B)))))),
+                SafeArea(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget> [
+                      Container(
+                        alignment: Alignment.center,
+                        width: 350.0,
+                        height: 500.0,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)),color: Colors.white),
+                        child: Stack (children:
+                        <Widget> [
+                          StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                              builder: (context, snapshot){
+                                if (!snapshot.hasData) return Text('Loading data');
+                                return
+                                  ListView(
+                                    children: <Widget>[
+                                      ListTile(
+                                        title: Text('AESTHETIC', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        subtitle:
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Container(
+                                            height: 10,
+                                            child: LinearProgressIndicator(
+                                              value: (snapshot.data.documents[2]['aesthetic']/10.0),
+                                              backgroundColor: Color(0xFF442B2B),
+                                              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: Text('FOOD', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        subtitle:
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Container(
+                                            height: 10,
+                                            child: LinearProgressIndicator(
+                                              value: (snapshot.data.documents[2]['food']/10.0),
+                                              backgroundColor: Color(0xFF442B2B),
+                                              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: Text('QUALITY', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        subtitle:
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Container(
+                                            height: 10,
+                                            child: LinearProgressIndicator(
+                                              value: (snapshot.data.documents[2]['quality']/10.0),
+                                              backgroundColor: Color(0xFF442B2B),
+                                              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: Text('MEAL OPTIONS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                      ),
+                                      ListTile(
+                                        title: Text('OUTLETS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                      ),
+                                      ListTile(
+                                        title: Text('WIFI', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                      ),
+                                      ListTile(
+                                        title: Text('SEATING', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                      ),
+                                      ListTile(
+                                        title: Text('CHILL VIBES', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                      ),
+                                    ],
+                                  );
+                              }
+                          ),
+                        ],
+
+                        ),
+                      ),
+                    ],
+
+                  ),
+                ),
+
+              ],
+            ),
+
+          ),
+
+          Container(
+            alignment: Alignment.center,
+            color: Color(0xFFDBCFC7),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+              StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return Text('Loading data');
+                    return
+                      SafeArea(
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: 350.0,
+                          height: 300.0,
+                          child: Text(snapshot.data.documents[2]['address'].toUpperCase(), textAlign: TextAlign.center, style: TextStyle(color: Color(0xFF442B2B), fontSize: 40, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)), color: Colors.white,
+                          ),
+                        ),
+                      );
+
+                  }
+              ),
+            ],
+            ),
+          ),
+
+
+        ],
+
+
+      )
+  );
+  }
+
+  }
+
+  class mudLeaf extends StatelessWidget{
+  @override
+  Widget build(BuildContext context)
+  {
+  return Scaffold(
+    body:
+    PageView(
+      scrollDirection: Axis.horizontal,
+      controller: ctrl,
+      children: [
+        Container(
+          color: Color(0xFFDBCFC7),
+          child:
+          Column(
+            children: <Widget> [
+              Padding(padding: const EdgeInsets.all(30.0), child: Container(alignment: Alignment.topLeft, child: SafeArea( child: Text('About the shop.',textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Inria_Serif", fontSize: 40, color: Color(0xFF442B2B)))))),
+              SafeArea(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget> [
+                    Container(
+                      alignment: Alignment.center,
+                      width: 350.0,
+                      height: 500.0,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)),color: Colors.white),
+                      child: Stack (children:
+                      <Widget> [
+                        StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                            builder: (context, snapshot){
+                              if (!snapshot.hasData) return Text('Loading data');
+                              return
+                                ListView(
+                                  children: <Widget>[
+                                    ListTile(
+                                      title: Text('AESTHETIC', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                      subtitle:
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Container(
+                                          height: 10,
+                                          child: LinearProgressIndicator(
+                                            value: (snapshot.data.documents[3]['aesthetic']/10.0),
+                                            backgroundColor: Color(0xFF442B2B),
+                                            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    ListTile(
+                                      title: Text('FOOD', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                      subtitle:
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Container(
+                                          height: 10,
+                                          child: LinearProgressIndicator(
+                                            value: (snapshot.data.documents[3]['food']/10.0),
+                                            backgroundColor: Color(0xFF442B2B),
+                                            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    ListTile(
+                                      title: Text('QUALITY', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                      subtitle:
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Container(
+                                          height: 10,
+                                          child: LinearProgressIndicator(
+                                            value: (snapshot.data.documents[2]['quality']/10.0),
+                                            backgroundColor: Color(0xFF442B2B),
+                                            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    ListTile(
+                                      title: Text('MEAL OPTIONS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                      trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                    ),
+                                    ListTile(
+                                      title: Text('OUTLETS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                      trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                    ),
+                                    ListTile(
+                                      title: Text('WIFI', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                      trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                    ),
+                                    ListTile(
+                                      title: Text('SEATING', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                      trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                    ),
+                                    ListTile(
+                                      title: Text('CHILL VIBES', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                      trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                    ),
+                                  ],
+                                );
+                            }
+                        ),
+                      ],
+
+                      ),
+                    ),
+                  ],
+
+                ),
+              ),
+
+            ],
+          ),
+
+        ),
+
+        Container(
+          alignment: Alignment.center,
+          color: Color(0xFFDBCFC7),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return Text('Loading data');
+                  return
+                    SafeArea(
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 350.0,
+                        height: 300.0,
+                        child: Text(snapshot.data.documents[3]['address'].toUpperCase(), textAlign: TextAlign.center, style: TextStyle(color: Color(0xFF442B2B), fontSize: 40, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)), color: Colors.white,
+                        ),
+                      ),
+                    );
+
+                }
+            ),
+          ],
+          ),
+        ),
+
+
+      ],
 
 
 
 
+    ),
+  );
+  }
+
+  }
+
+  class Murray extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        body:
+        PageView(
+          scrollDirection: Axis.horizontal,
+          controller: ctrl,
+          children: [
+            Container(
+              color: Color(0xFFDBCFC7),
+              child:
+              Column(
+                children: <Widget> [
+                  Padding(padding: const EdgeInsets.all(30.0), child: Container(alignment: Alignment.topLeft, child: SafeArea( child: Text('About the shop.',textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Inria_Serif", fontSize: 40, color: Color(0xFF442B2B)))))),
+                  SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget> [
+                        Container(
+                          alignment: Alignment.center,
+                          width: 350.0,
+                          height: 500.0,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)),color: Colors.white),
+                          child: Stack (children:
+                          <Widget> [
+                            StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                                builder: (context, snapshot){
+                                  if (!snapshot.hasData) return Text('Loading data');
+                                  return
+                                    ListView(
+                                      children: <Widget>[
+                                        ListTile(
+                                          title: Text('AESTHETIC', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          subtitle:
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: Container(
+                                              height: 10,
+                                              child: LinearProgressIndicator(
+                                                value: (snapshot.data.documents[4]['aesthetic']/10.0),
+                                                backgroundColor: Color(0xFF442B2B),
+                                                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        ListTile(
+                                          title: Text('FOOD', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          subtitle:
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: Container(
+                                              height: 10,
+                                              child: LinearProgressIndicator(
+                                                value: (snapshot.data.documents[4]['food']/10.0),
+                                                backgroundColor: Color(0xFF442B2B),
+                                                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        ListTile(
+                                          title: Text('QUALITY', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          subtitle:
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: Container(
+                                              height: 10,
+                                              child: LinearProgressIndicator(
+                                                value: (snapshot.data.documents[4]['quality']/10.0),
+                                                backgroundColor: Color(0xFF442B2B),
+                                                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        ListTile(
+                                          title: Text('MEAL OPTIONS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                        ),
+                                        ListTile(
+                                          title: Text('OUTLETS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                        ),
+                                        ListTile(
+                                          title: Text('WIFI', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                        ),
+                                        ListTile(
+                                          title: Text('SEATING', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                        ),
+                                        ListTile(
+                                          title: Text('CHILL VIBES', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                        ),
+                                      ],
+                                    );
+                                }
+                            ),
+                          ],
+
+                          ),
+                        ),
+                      ],
+
+                    ),
+                  ),
+
+                ],
+              ),
+
+            ),
+
+            Container(
+              alignment: Alignment.center,
+              color: Color(0xFFDBCFC7),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return Text('Loading data');
+                      return
+                        SafeArea(
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 350.0,
+                            height: 300.0,
+                            child: Text(snapshot.data.documents[4]['address'].toUpperCase(), textAlign: TextAlign.center, style: TextStyle(color: Color(0xFF442B2B), fontSize: 40, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)), color: Colors.white,
+                            ),
+                          ),
+                        );
+
+                    }
+                ),
+              ],
+              ),
+            ),
+
+
+          ],
 
 
 
+
+        ),
+      );
+    }
+  }
+
+  class pearlCup extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        body:
+        PageView(
+          scrollDirection: Axis.horizontal,
+          controller: ctrl,
+          children: [
+            Container(
+              color: Color(0xFFDBCFC7),
+              child:
+              Column(
+                children: <Widget> [
+                  Padding(padding: const EdgeInsets.all(30.0), child: Container(alignment: Alignment.topLeft, child: SafeArea( child: Text('About the shop.',textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Inria_Serif", fontSize: 40, color: Color(0xFF442B2B)))))),
+                  SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget> [
+                        Container(
+                          alignment: Alignment.center,
+                          width: 350.0,
+                          height: 500.0,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)),color: Colors.white),
+                          child: Stack (children:
+                          <Widget> [
+                            StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                                builder: (context, snapshot){
+                                  if (!snapshot.hasData) return Text('Loading data');
+                                  return
+                                    ListView(
+                                      children: <Widget>[
+                                        ListTile(
+                                          title: Text('AESTHETIC', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          subtitle:
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: Container(
+                                              height: 10,
+                                              child: LinearProgressIndicator(
+                                                value: (snapshot.data.documents[5]['aesthetic']/10.0),
+                                                backgroundColor: Color(0xFF442B2B),
+                                                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        ListTile(
+                                          title: Text('FOOD', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          subtitle:
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: Container(
+                                              height: 10,
+                                              child: LinearProgressIndicator(
+                                                value: (snapshot.data.documents[5]['food']/10.0),
+                                                backgroundColor: Color(0xFF442B2B),
+                                                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        ListTile(
+                                          title: Text('QUALITY', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          subtitle:
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: Container(
+                                              height: 10,
+                                              child: LinearProgressIndicator(
+                                                value: (snapshot.data.documents[5]['quality']/10.0),
+                                                backgroundColor: Color(0xFF442B2B),
+                                                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        ListTile(
+                                          title: Text('MEAL OPTIONS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                        ),
+                                        ListTile(
+                                          title: Text('OUTLETS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                        ),
+                                        ListTile(
+                                          title: Text('WIFI', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                        ),
+                                        ListTile(
+                                          title: Text('SEATING', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                        ),
+                                        ListTile(
+                                          title: Text('CHILL VIBES', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                          trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                        ),
+                                      ],
+                                    );
+                                }
+                            ),
+                          ],
+
+                          ),
+                        ),
+                      ],
+
+                    ),
+                  ),
+
+                ],
+              ),
+
+            ),
+
+            Container(
+              alignment: Alignment.center,
+              color: Color(0xFFDBCFC7),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return Text('Loading data');
+                      return
+                        SafeArea(
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 350.0,
+                            height: 300.0,
+                            child: Text(snapshot.data.documents[5]['address'].toUpperCase(), textAlign: TextAlign.center, style: TextStyle(color: Color(0xFF442B2B), fontSize: 40, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)), color: Colors.white,
+                            ),
+                          ),
+                        );
+
+                    }
+                ),
+              ],
+              ),
+            ),
+
+
+          ],
+
+
+
+
+        ),
+      );
+    }
+  }
+
+  class whiteRock extends StatelessWidget{
+  @override
+  Widget build(BuildContext context)
+  {
+    return Scaffold(
+      body:
+      PageView(
+        scrollDirection: Axis.horizontal,
+        controller: ctrl,
+        children: [
+          Container(
+            color: Color(0xFFDBCFC7),
+            child:
+            Column(
+              children: <Widget> [
+                Padding(padding: const EdgeInsets.all(30.0), child: Container(alignment: Alignment.topLeft, child: SafeArea( child: Text('About the shop.',textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Inria_Serif", fontSize: 40, color: Color(0xFF442B2B)))))),
+                SafeArea(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget> [
+                      Container(
+                        alignment: Alignment.center,
+                        width: 350.0,
+                        height: 500.0,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)),color: Colors.white),
+                        child: Stack (children:
+                        <Widget> [
+                          StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                              builder: (context, snapshot){
+                                if (!snapshot.hasData) return Text('Loading data');
+                                return
+                                  ListView(
+                                    children: <Widget>[
+                                      ListTile(
+                                        title: Text('AESTHETIC', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        subtitle:
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Container(
+                                            height: 10,
+                                            child: LinearProgressIndicator(
+                                              value: (snapshot.data.documents[1]['aesthetic']/10.0),
+                                              backgroundColor: Color(0xFF442B2B),
+                                              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: Text('FOOD', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        subtitle:
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Container(
+                                            height: 10,
+                                            child: LinearProgressIndicator(
+                                              value: (snapshot.data.documents[2]['food']/10.0),
+                                              backgroundColor: Color(0xFF442B2B),
+                                              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: Text('QUALITY', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        subtitle:
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Container(
+                                            height: 10,
+                                            child: LinearProgressIndicator(
+                                              value: (snapshot.data.documents[1]['quality']/10.0),
+                                              backgroundColor: Color(0xFF442B2B),
+                                              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFDBCFC7)),
+
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: Text('MEAL OPTIONS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                      ),
+                                      ListTile(
+                                        title: Text('OUTLETS', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                      ),
+                                      ListTile(
+                                        title: Text('WIFI', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                      ),
+                                      ListTile(
+                                        title: Text('SEATING', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                      ),
+                                      ListTile(
+                                        title: Text('CHILL VIBES', style: TextStyle(color: Color(0xFF442B2B), fontSize: 20, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                                        trailing: Icon(Icons.check, color: Color(0xFF442B2B)),
+
+                                      ),
+                                    ],
+                                  );
+                              }
+                          ),
+                        ],
+
+                        ),
+                      ),
+                    ],
+
+                  ),
+                ),
+
+              ],
+            ),
+
+          ),
+
+          Container(
+            alignment: Alignment.center,
+            color: Color(0xFFDBCFC7),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+              StreamBuilder(stream: Firestore.instance.collection('cafes').snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return Text('Loading data');
+                    return
+                      SafeArea(
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: 350.0,
+                          height: 300.0,
+                          child: Text(snapshot.data.documents[6]['address'].toUpperCase(), textAlign: TextAlign.center, style: TextStyle(color: Color(0xFF442B2B), fontSize: 40, fontFamily: 'Montserrat', letterSpacing: 2.0),),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12.0)), color: Colors.white,
+                          ),
+                        ),
+                      );
+
+                  }
+              ),
+            ],
+            ),
+          ),
+
+
+        ],
+
+
+
+
+      ),
+    );
+  }
+  }
 
